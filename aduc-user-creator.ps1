@@ -306,21 +306,30 @@ function Register-HoverHighlight {
         return
     }
 
-    $Button.Tag = @{
-        IconPath = $Button.Tag
-        DefaultBackColor = $Button.BackColor
+    if ($Button.Tag -isnot [hashtable]) {
+        $Button.Tag = @{ IconPath = $Button.Tag }
+    }
+
+    $defaultColor = $Button.BackColor
+    if ($defaultColor -eq $null) {
+        $defaultColor = [System.Drawing.SystemColors]::Control
+    }
+    $Button.Tag.DefaultBackColor = $defaultColor
+
+    $hover = $HoverColor
+    if ($hover -eq $null) {
+        $hover = [System.Drawing.Color]::LightSteelBlue
     }
 
     $Button.Add_MouseEnter({
-        $this.BackColor = $HoverColor
+        $this.BackColor = $this.Tag.HoverColor
     })
 
     $Button.Add_MouseLeave({
-        $defaultColor = $this.Tag.DefaultBackColor
-        if ($defaultColor) {
-            $this.BackColor = $defaultColor
-        }
+        $this.BackColor = $this.Tag.DefaultBackColor
     })
+
+    $Button.Tag.HoverColor = $hover
 }
 
 function New-RandomPassword {
