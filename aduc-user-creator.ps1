@@ -509,16 +509,6 @@ $menuTitleLabel.Padding = New-Object System.Windows.Forms.Padding(20, 20, 0, 10)
 $menuTitleLabel.AutoSize = $true
 $menuTitleLabel.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 14, [System.Drawing.FontStyle]::Regular)
 
-$logoPictureBox = New-Object System.Windows.Forms.PictureBox
-$logoPictureBox.Dock = "Top"
-$logoPictureBox.Height = 120
-$logoPictureBox.SizeMode = "Zoom"
-$logoPictureBox.Margin = New-Object System.Windows.Forms.Padding(10)
-$logoImage = Get-LocalImage -Path "C:\\JUMP\\logo.png"
-if ($logoImage) {
-    $logoPictureBox.Image = $logoImage
-}
-
 $menuGrid = New-Object System.Windows.Forms.TableLayoutPanel
 $menuGrid.ColumnCount = 4
 $menuGrid.RowCount = 2
@@ -530,6 +520,7 @@ $menuGrid.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.
 $menuGrid.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 25)))
 $menuGrid.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 50)))
 $menuGrid.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 50)))
+$menuGrid.BackColor = [System.Drawing.Color]::FromArgb(230, 255, 255, 255)
 
 $createTileButton = New-Object System.Windows.Forms.Button
 $createTileButton.Text = "Create User"
@@ -1576,8 +1567,7 @@ $menuGrid.Controls.Add($dummyTileButton3, 2, 1)
 $menuGrid.Controls.Add($dummyTileButton4, 3, 1)
 $mainMenuPanel.Controls.AddRange(@(
     $menuGrid,
-    $menuTitleLabel,
-    $logoPictureBox
+    $menuTitleLabel
 ))
 
 $form.Controls.Add($mainMenuPanel)
@@ -1605,6 +1595,12 @@ $form.Add_Shown({
     Load-OUs -ComboBox $terminateOuComboBox -StatusLabel $terminateStatusLabel
     Load-DisabledOUs -ComboBox $reenableOuComboBox -StatusLabel $reenableStatusLabel
     Load-OUs -ComboBox $resetOuComboBox -StatusLabel $resetStatusLabel
+
+    $logoImage = Get-LocalImage -Path "C:\\JUMP\\logo.png"
+    if ($logoImage) {
+        $mainMenuPanel.BackgroundImage = $logoImage
+        $mainMenuPanel.BackgroundImageLayout = "Zoom"
+    }
 
     Register-ButtonIcon -Button $createTileButton -Path "C:\\JUMP\\enableuser.ico"
     Register-ButtonIcon -Button $terminateTileButton -Path "C:\\JUMP\\termuser.ico"
