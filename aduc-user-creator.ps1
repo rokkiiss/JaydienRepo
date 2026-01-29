@@ -267,12 +267,33 @@ function Set-ButtonIcon {
         return
     }
 
-    $targetWidth = [Math]::Max(1, $Button.Width)
-    $targetHeight = [Math]::Max(1, $Button.Height)
-    $image = Get-LocalIconImage -Path $Path -Width $targetWidth -Height $targetHeight
+    $targetWidth = [Math]::Max(1, $Button.ClientSize.Width)
+    $targetHeight = [Math]::Max(1, $Button.ClientSize.Height)
+    $targetSize = [Math]::Max(1, [Math]::Floor([Math]::Min($targetWidth, $targetHeight) * 0.6))
+    $image = Get-LocalIconImage -Path $Path -Width $targetSize -Height $targetSize
     if ($image) {
         $Button.Image = $image
     }
+}
+
+function Register-ButtonIcon {
+    param(
+        [System.Windows.Forms.Button]$Button,
+        [string]$Path
+    )
+
+    if (-not $Button) {
+        return
+    }
+
+    $Button.Tag = $Path
+    Set-ButtonIcon -Button $Button -Path $Path
+    $Button.Add_Resize({
+        $iconPath = $this.Tag
+        if ($iconPath) {
+            Set-ButtonIcon -Button $this -Path $iconPath
+        }
+    })
 }
 
 function New-RandomPassword {
@@ -404,108 +425,117 @@ $form = New-Object System.Windows.Forms.Form
 $form.Text = "J.U.M.P. Jaydien User Management Platform"
 $form.Size = New-Object System.Drawing.Size(960, 560)
 $form.StartPosition = "CenterScreen"
-$form.FormBorderStyle = "FixedDialog"
-$form.MaximizeBox = $false
+$form.FormBorderStyle = "Sizable"
+$form.MaximizeBox = $true
+$form.MinimumSize = New-Object System.Drawing.Size(800, 500)
 
 $font = New-Object System.Drawing.Font("Segoe UI", 10)
 
 $mainMenuPanel = New-Object System.Windows.Forms.Panel
-$mainMenuPanel.Location = New-Object System.Drawing.Point(10, 10)
-$mainMenuPanel.Size = New-Object System.Drawing.Size(930, 460)
+$mainMenuPanel.Dock = "Fill"
 
 $createPanel = New-Object System.Windows.Forms.Panel
-$createPanel.Location = New-Object System.Drawing.Point(10, 10)
-$createPanel.Size = New-Object System.Drawing.Size(930, 460)
+$createPanel.Dock = "Fill"
 $createPanel.Visible = $false
 
 $terminatePanel = New-Object System.Windows.Forms.Panel
-$terminatePanel.Location = New-Object System.Drawing.Point(10, 10)
-$terminatePanel.Size = New-Object System.Drawing.Size(930, 460)
+$terminatePanel.Dock = "Fill"
 $terminatePanel.Visible = $false
 
 $reenablePanel = New-Object System.Windows.Forms.Panel
-$reenablePanel.Location = New-Object System.Drawing.Point(10, 10)
-$reenablePanel.Size = New-Object System.Drawing.Size(930, 460)
+$reenablePanel.Dock = "Fill"
 $reenablePanel.Visible = $false
 
 $resetPanel = New-Object System.Windows.Forms.Panel
-$resetPanel.Location = New-Object System.Drawing.Point(10, 10)
-$resetPanel.Size = New-Object System.Drawing.Size(930, 460)
+$resetPanel.Dock = "Fill"
 $resetPanel.Visible = $false
 
 $menuTitleLabel = New-Object System.Windows.Forms.Label
 $menuTitleLabel.Text = "Select an action"
-$menuTitleLabel.Location = New-Object System.Drawing.Point(20, 20)
-$menuTitleLabel.Size = New-Object System.Drawing.Size(300, 30)
+$menuTitleLabel.Dock = "Top"
+$menuTitleLabel.Padding = New-Object System.Windows.Forms.Padding(20, 20, 0, 10)
+$menuTitleLabel.AutoSize = $true
 $menuTitleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 14, [System.Drawing.FontStyle]::Bold)
+
+$menuGrid = New-Object System.Windows.Forms.TableLayoutPanel
+$menuGrid.ColumnCount = 4
+$menuGrid.RowCount = 2
+$menuGrid.Dock = "Fill"
+$menuGrid.Padding = New-Object System.Windows.Forms.Padding(20, 20, 20, 20)
+$menuGrid.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 25)))
+$menuGrid.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 25)))
+$menuGrid.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 25)))
+$menuGrid.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 25)))
+$menuGrid.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 50)))
+$menuGrid.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 50)))
 
 $createTileButton = New-Object System.Windows.Forms.Button
 $createTileButton.Text = "Create User"
-$createTileButton.Location = New-Object System.Drawing.Point(80, 120)
-$createTileButton.Size = New-Object System.Drawing.Size(100, 100)
 $createTileButton.Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
 $createTileButton.TextImageRelation = "ImageAboveText"
 $createTileButton.ImageAlign = "MiddleCenter"
 $createTileButton.TextAlign = "BottomCenter"
+$createTileButton.Dock = "Fill"
+$createTileButton.Margin = New-Object System.Windows.Forms.Padding(10)
 
 $terminateTileButton = New-Object System.Windows.Forms.Button
 $terminateTileButton.Text = "Terminate User"
-$terminateTileButton.Location = New-Object System.Drawing.Point(220, 120)
-$terminateTileButton.Size = New-Object System.Drawing.Size(100, 100)
 $terminateTileButton.Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
 $terminateTileButton.TextImageRelation = "ImageAboveText"
 $terminateTileButton.ImageAlign = "MiddleCenter"
 $terminateTileButton.TextAlign = "BottomCenter"
+$terminateTileButton.Dock = "Fill"
+$terminateTileButton.Margin = New-Object System.Windows.Forms.Padding(10)
 
 $reenableTileButton = New-Object System.Windows.Forms.Button
 $reenableTileButton.Text = "Re-enable User"
-$reenableTileButton.Location = New-Object System.Drawing.Point(360, 120)
-$reenableTileButton.Size = New-Object System.Drawing.Size(100, 100)
 $reenableTileButton.Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
 $reenableTileButton.TextImageRelation = "ImageAboveText"
 $reenableTileButton.ImageAlign = "MiddleCenter"
 $reenableTileButton.TextAlign = "BottomCenter"
+$reenableTileButton.Dock = "Fill"
+$reenableTileButton.Margin = New-Object System.Windows.Forms.Padding(10)
 
 $resetTileButton = New-Object System.Windows.Forms.Button
 $resetTileButton.Text = "Reset Password"
-$resetTileButton.Location = New-Object System.Drawing.Point(500, 120)
-$resetTileButton.Size = New-Object System.Drawing.Size(100, 100)
 $resetTileButton.Font = New-Object System.Drawing.Font("Segoe UI", 11, [System.Drawing.FontStyle]::Bold)
 $resetTileButton.TextImageRelation = "ImageAboveText"
 $resetTileButton.ImageAlign = "MiddleCenter"
 $resetTileButton.TextAlign = "BottomCenter"
+$resetTileButton.Dock = "Fill"
+$resetTileButton.Margin = New-Object System.Windows.Forms.Padding(10)
 
 $dummyTileButton1 = New-Object System.Windows.Forms.Button
 $dummyTileButton1.Text = "Under Development"
-$dummyTileButton1.Location = New-Object System.Drawing.Point(80, 250)
-$dummyTileButton1.Size = New-Object System.Drawing.Size(100, 100)
 $dummyTileButton1.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
 $dummyTileButton1.Enabled = $false
 $dummyTileButton1.BackColor = [System.Drawing.Color]::LightGray
+$dummyTileButton1.Dock = "Fill"
+$dummyTileButton1.Margin = New-Object System.Windows.Forms.Padding(10)
 
 $dummyTileButton2 = New-Object System.Windows.Forms.Button
 $dummyTileButton2.Text = "Under Development"
-$dummyTileButton2.Location = New-Object System.Drawing.Point(220, 250)
-$dummyTileButton2.Size = New-Object System.Drawing.Size(100, 100)
 $dummyTileButton2.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
 $dummyTileButton2.Enabled = $false
 $dummyTileButton2.BackColor = [System.Drawing.Color]::LightGray
+$dummyTileButton2.Dock = "Fill"
+$dummyTileButton2.Margin = New-Object System.Windows.Forms.Padding(10)
 
 $dummyTileButton3 = New-Object System.Windows.Forms.Button
 $dummyTileButton3.Text = "Under Development"
-$dummyTileButton3.Location = New-Object System.Drawing.Point(360, 250)
-$dummyTileButton3.Size = New-Object System.Drawing.Size(100, 100)
 $dummyTileButton3.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
 $dummyTileButton3.Enabled = $false
 $dummyTileButton3.BackColor = [System.Drawing.Color]::LightGray
+$dummyTileButton3.Dock = "Fill"
+$dummyTileButton3.Margin = New-Object System.Windows.Forms.Padding(10)
 
 $dummyTileButton4 = New-Object System.Windows.Forms.Button
 $dummyTileButton4.Text = "Under Development"
-$dummyTileButton4.Location = New-Object System.Drawing.Point(500, 250)
-$dummyTileButton4.Size = New-Object System.Drawing.Size(100, 100)
 $dummyTileButton4.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
 $dummyTileButton4.Enabled = $false
 $dummyTileButton4.BackColor = [System.Drawing.Color]::LightGray
+$dummyTileButton4.Dock = "Fill"
+$dummyTileButton4.Margin = New-Object System.Windows.Forms.Padding(10)
 
 $createTileButton.Add_Click({
     Show-Panel -PanelToShow $createPanel -PanelToHide1 $mainMenuPanel -PanelToHide2 $terminatePanel
@@ -1462,16 +1492,17 @@ $resetPanel.Controls.AddRange(@(
     $resetStatusLabel
 ))
 
+$menuGrid.Controls.Add($createTileButton, 0, 0)
+$menuGrid.Controls.Add($terminateTileButton, 1, 0)
+$menuGrid.Controls.Add($reenableTileButton, 2, 0)
+$menuGrid.Controls.Add($resetTileButton, 3, 0)
+$menuGrid.Controls.Add($dummyTileButton1, 0, 1)
+$menuGrid.Controls.Add($dummyTileButton2, 1, 1)
+$menuGrid.Controls.Add($dummyTileButton3, 2, 1)
+$menuGrid.Controls.Add($dummyTileButton4, 3, 1)
 $mainMenuPanel.Controls.AddRange(@(
-    $menuTitleLabel,
-    $createTileButton,
-    $terminateTileButton,
-    $reenableTileButton,
-    $resetTileButton,
-    $dummyTileButton1,
-    $dummyTileButton2,
-    $dummyTileButton3,
-    $dummyTileButton4
+    $menuGrid,
+    $menuTitleLabel
 ))
 
 $form.Controls.Add($mainMenuPanel)
@@ -1500,9 +1531,9 @@ $form.Add_Shown({
     Load-DisabledOUs -ComboBox $reenableOuComboBox -StatusLabel $reenableStatusLabel
     Load-OUs -ComboBox $resetOuComboBox -StatusLabel $resetStatusLabel
 
-    Set-ButtonIcon -Button $createTileButton -Path "C:\\JUMP\\enableuser.ico"
-    Set-ButtonIcon -Button $terminateTileButton -Path "C:\\JUMP\\termuser.ico"
-    Set-ButtonIcon -Button $reenableTileButton -Path "C:\\JUMP\\reenable.ico"
+    Register-ButtonIcon -Button $createTileButton -Path "C:\\JUMP\\enableuser.ico"
+    Register-ButtonIcon -Button $terminateTileButton -Path "C:\\JUMP\\termuser.ico"
+    Register-ButtonIcon -Button $reenableTileButton -Path "C:\\JUMP\\reenable.ico"
 })
 
 [void]$form.ShowDialog()
