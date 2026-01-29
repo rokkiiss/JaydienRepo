@@ -257,6 +257,22 @@ function Get-LocalIconImage {
     }
 }
 
+function Get-LocalImage {
+    param(
+        [string]$Path
+    )
+
+    try {
+        if (-not (Test-Path -Path $Path)) {
+            return $null
+        }
+        return [System.Drawing.Image]::FromFile($Path)
+    }
+    catch {
+        return $null
+    }
+}
+
 function Set-ButtonIcon {
     param(
         [System.Windows.Forms.Button]$Button,
@@ -492,6 +508,16 @@ $menuTitleLabel.Dock = "Top"
 $menuTitleLabel.Padding = New-Object System.Windows.Forms.Padding(20, 20, 0, 10)
 $menuTitleLabel.AutoSize = $true
 $menuTitleLabel.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 14, [System.Drawing.FontStyle]::Regular)
+
+$logoPictureBox = New-Object System.Windows.Forms.PictureBox
+$logoPictureBox.Dock = "Top"
+$logoPictureBox.Height = 120
+$logoPictureBox.SizeMode = "Zoom"
+$logoPictureBox.Margin = New-Object System.Windows.Forms.Padding(10)
+$logoImage = Get-LocalImage -Path "C:\\JUMP\\logo.png"
+if ($logoImage) {
+    $logoPictureBox.Image = $logoImage
+}
 
 $menuGrid = New-Object System.Windows.Forms.TableLayoutPanel
 $menuGrid.ColumnCount = 4
@@ -1550,7 +1576,8 @@ $menuGrid.Controls.Add($dummyTileButton3, 2, 1)
 $menuGrid.Controls.Add($dummyTileButton4, 3, 1)
 $mainMenuPanel.Controls.AddRange(@(
     $menuGrid,
-    $menuTitleLabel
+    $menuTitleLabel,
+    $logoPictureBox
 ))
 
 $form.Controls.Add($mainMenuPanel)
