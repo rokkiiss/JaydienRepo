@@ -559,6 +559,16 @@ $menuTitleLabel.Padding = New-Object System.Windows.Forms.Padding(20, 20, 0, 10)
 $menuTitleLabel.AutoSize = $true
 $menuTitleLabel.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 14, [System.Drawing.FontStyle]::Regular)
 
+$menuStrip = New-Object System.Windows.Forms.MenuStrip
+$menuStrip.Dock = "Top"
+$helpMenuItem = New-Object System.Windows.Forms.ToolStripMenuItem("Help")
+$aboutMenuItem = New-Object System.Windows.Forms.ToolStripMenuItem("About")
+$aboutMenuItem.Add_Click({
+    Show-AboutDialog
+})
+[void]$helpMenuItem.DropDownItems.Add($aboutMenuItem)
+[void]$menuStrip.Items.Add($helpMenuItem)
+
 $menuSyncButton = New-Object System.Windows.Forms.Button
 $menuSyncButton.Text = "SYNC NOW"
 $menuSyncButton.Location = New-Object System.Drawing.Point(830, 20)
@@ -567,16 +577,6 @@ $menuSyncButton.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 9, [S
 $menuSyncButton.Anchor = "Top,Right"
 $menuSyncButton.Add_Click({
     Invoke-DirectorySync
-})
-
-$menuAboutButton = New-Object System.Windows.Forms.Button
-$menuAboutButton.Text = "About"
-$menuAboutButton.Location = New-Object System.Drawing.Point(740, 20)
-$menuAboutButton.Size = New-Object System.Drawing.Size(80, 30)
-$menuAboutButton.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 9, [System.Drawing.FontStyle]::Regular)
-$menuAboutButton.Anchor = "Top,Right"
-$menuAboutButton.Add_Click({
-    Show-AboutDialog
 })
 
 $menuGrid = New-Object System.Windows.Forms.TableLayoutPanel
@@ -1680,9 +1680,10 @@ $mainMenuPanel.Controls.AddRange(@(
     $menuGrid,
     $menuTitleLabel,
     $menuSyncButton,
-    $menuAboutButton
+    $menuStrip
 ))
 
+$form.MainMenuStrip = $menuStrip
 $form.Controls.Add($footerStatusLabel)
 $form.Controls.Add($mainMenuPanel)
 $form.Controls.Add($createPanel)
