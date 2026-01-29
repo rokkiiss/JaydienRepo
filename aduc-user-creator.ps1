@@ -296,6 +296,33 @@ function Register-ButtonIcon {
     })
 }
 
+function Register-HoverHighlight {
+    param(
+        [System.Windows.Forms.Button]$Button,
+        [System.Drawing.Color]$HoverColor
+    )
+
+    if (-not $Button) {
+        return
+    }
+
+    $Button.Tag = @{
+        IconPath = $Button.Tag
+        DefaultBackColor = $Button.BackColor
+    }
+
+    $Button.Add_MouseEnter({
+        $this.BackColor = $HoverColor
+    })
+
+    $Button.Add_MouseLeave({
+        $defaultColor = $this.Tag.DefaultBackColor
+        if ($defaultColor) {
+            $this.BackColor = $defaultColor
+        }
+    })
+}
+
 function New-RandomPassword {
     param(
         [int]$Length = 16
@@ -1551,6 +1578,16 @@ $form.Add_Shown({
     Register-ButtonIcon -Button $dummyTileButton2 -Path "C:\\JUMP\\underdev.ico"
     Register-ButtonIcon -Button $dummyTileButton3 -Path "C:\\JUMP\\underdev.ico"
     Register-ButtonIcon -Button $dummyTileButton4 -Path "C:\\JUMP\\underdev.ico"
+
+    $hoverColor = [System.Drawing.Color]::LightSteelBlue
+    Register-HoverHighlight -Button $createTileButton -HoverColor $hoverColor
+    Register-HoverHighlight -Button $terminateTileButton -HoverColor $hoverColor
+    Register-HoverHighlight -Button $reenableTileButton -HoverColor $hoverColor
+    Register-HoverHighlight -Button $resetTileButton -HoverColor $hoverColor
+    Register-HoverHighlight -Button $dummyTileButton1 -HoverColor $hoverColor
+    Register-HoverHighlight -Button $dummyTileButton2 -HoverColor $hoverColor
+    Register-HoverHighlight -Button $dummyTileButton3 -HoverColor $hoverColor
+    Register-HoverHighlight -Button $dummyTileButton4 -HoverColor $hoverColor
 })
 
 [void]$form.ShowDialog()
