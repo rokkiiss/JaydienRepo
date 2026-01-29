@@ -510,6 +510,9 @@ $dummyTileButton1.Text = "Under Development"
 $dummyTileButton1.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
 $dummyTileButton1.Enabled = $false
 $dummyTileButton1.BackColor = [System.Drawing.Color]::LightGray
+$dummyTileButton1.TextImageRelation = "ImageAboveText"
+$dummyTileButton1.ImageAlign = "MiddleCenter"
+$dummyTileButton1.TextAlign = "BottomCenter"
 $dummyTileButton1.Dock = "Fill"
 $dummyTileButton1.Margin = New-Object System.Windows.Forms.Padding(10)
 
@@ -518,6 +521,9 @@ $dummyTileButton2.Text = "Under Development"
 $dummyTileButton2.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
 $dummyTileButton2.Enabled = $false
 $dummyTileButton2.BackColor = [System.Drawing.Color]::LightGray
+$dummyTileButton2.TextImageRelation = "ImageAboveText"
+$dummyTileButton2.ImageAlign = "MiddleCenter"
+$dummyTileButton2.TextAlign = "BottomCenter"
 $dummyTileButton2.Dock = "Fill"
 $dummyTileButton2.Margin = New-Object System.Windows.Forms.Padding(10)
 
@@ -526,6 +532,9 @@ $dummyTileButton3.Text = "Under Development"
 $dummyTileButton3.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
 $dummyTileButton3.Enabled = $false
 $dummyTileButton3.BackColor = [System.Drawing.Color]::LightGray
+$dummyTileButton3.TextImageRelation = "ImageAboveText"
+$dummyTileButton3.ImageAlign = "MiddleCenter"
+$dummyTileButton3.TextAlign = "BottomCenter"
 $dummyTileButton3.Dock = "Fill"
 $dummyTileButton3.Margin = New-Object System.Windows.Forms.Padding(10)
 
@@ -534,6 +543,9 @@ $dummyTileButton4.Text = "Under Development"
 $dummyTileButton4.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
 $dummyTileButton4.Enabled = $false
 $dummyTileButton4.BackColor = [System.Drawing.Color]::LightGray
+$dummyTileButton4.TextImageRelation = "ImageAboveText"
+$dummyTileButton4.ImageAlign = "MiddleCenter"
+$dummyTileButton4.TextAlign = "BottomCenter"
 $dummyTileButton4.Dock = "Fill"
 $dummyTileButton4.Margin = New-Object System.Windows.Forms.Padding(10)
 
@@ -1534,6 +1546,11 @@ $form.Add_Shown({
     Register-ButtonIcon -Button $createTileButton -Path "C:\\JUMP\\enableuser.ico"
     Register-ButtonIcon -Button $terminateTileButton -Path "C:\\JUMP\\termuser.ico"
     Register-ButtonIcon -Button $reenableTileButton -Path "C:\\JUMP\\reenable.ico"
+    Register-ButtonIcon -Button $resetTileButton -Path "C:\\JUMP\\pwreset.ico"
+    Register-ButtonIcon -Button $dummyTileButton1 -Path "C:\\JUMP\\underdev.ico"
+    Register-ButtonIcon -Button $dummyTileButton2 -Path "C:\\JUMP\\underdev.ico"
+    Register-ButtonIcon -Button $dummyTileButton3 -Path "C:\\JUMP\\underdev.ico"
+    Register-ButtonIcon -Button $dummyTileButton4 -Path "C:\\JUMP\\underdev.ico"
 })
 
 [void]$form.ShowDialog()
