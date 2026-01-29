@@ -257,6 +257,24 @@ function Get-LocalIconImage {
     }
 }
 
+function Set-ButtonIcon {
+    param(
+        [System.Windows.Forms.Button]$Button,
+        [string]$Path
+    )
+
+    if (-not $Button) {
+        return
+    }
+
+    $targetWidth = [Math]::Max(1, $Button.Width)
+    $targetHeight = [Math]::Max(1, $Button.Height)
+    $image = Get-LocalIconImage -Path $Path -Width $targetWidth -Height $targetHeight
+    if ($image) {
+        $Button.Image = $image
+    }
+}
+
 function New-RandomPassword {
     param(
         [int]$Length = 16
@@ -1482,20 +1500,9 @@ $form.Add_Shown({
     Load-DisabledOUs -ComboBox $reenableOuComboBox -StatusLabel $reenableStatusLabel
     Load-OUs -ComboBox $resetOuComboBox -StatusLabel $resetStatusLabel
 
-$createThumbnail = Get-LocalIconImage -Path "C:\\JUMP\\enableuser.ico" -Width 100 -Height 100
-    if ($createThumbnail) {
-        $createTileButton.Image = $createThumbnail
-    }
-
-$terminateThumbnail = Get-LocalIconImage -Path "C:\\JUMP\\termuser.ico" -Width 100 -Height 100
-    if ($terminateThumbnail) {
-        $terminateTileButton.Image = $terminateThumbnail
-    }
-
-$reenableThumbnail = Get-LocalIconImage -Path "C:\\JUMP\\reenable.ico" -Width 100 -Height 100
-    if ($reenableThumbnail) {
-        $reenableTileButton.Image = $reenableThumbnail
-    }
+    Set-ButtonIcon -Button $createTileButton -Path "C:\\JUMP\\enableuser.ico"
+    Set-ButtonIcon -Button $terminateTileButton -Path "C:\\JUMP\\termuser.ico"
+    Set-ButtonIcon -Button $reenableTileButton -Path "C:\\JUMP\\reenable.ico"
 })
 
 [void]$form.ShowDialog()
