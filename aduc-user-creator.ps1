@@ -15,6 +15,8 @@ $script:lastGeneratedCredentials = $null
 $script:disabledOuDisplayMap = @{}
 $script:terminateUserDisplayNames = @()
 $script:reenableUserDisplayNames = @()
+$script:resetUserMap = @{}
+$script:resetUserDisplayNames = @()
 
 function Get-SamAccountName {
     param(
@@ -392,6 +394,11 @@ $reenablePanel.Location = New-Object System.Drawing.Point(10, 10)
 $reenablePanel.Size = New-Object System.Drawing.Size(930, 460)
 $reenablePanel.Visible = $false
 
+$resetPanel = New-Object System.Windows.Forms.Panel
+$resetPanel.Location = New-Object System.Drawing.Point(10, 10)
+$resetPanel.Size = New-Object System.Drawing.Size(930, 460)
+$resetPanel.Visible = $false
+
 $menuTitleLabel = New-Object System.Windows.Forms.Label
 $menuTitleLabel.Text = "Select an action"
 $menuTitleLabel.Location = New-Object System.Drawing.Point(20, 20)
@@ -425,6 +432,12 @@ $reenableTileButton.TextImageRelation = "ImageAboveText"
 $reenableTileButton.ImageAlign = "MiddleCenter"
 $reenableTileButton.TextAlign = "BottomCenter"
 
+$resetTileButton = New-Object System.Windows.Forms.Button
+$resetTileButton.Text = "Reset Password"
+$resetTileButton.Location = New-Object System.Drawing.Point(380, 320)
+$resetTileButton.Size = New-Object System.Drawing.Size(160, 80)
+$resetTileButton.Font = New-Object System.Drawing.Font("Segoe UI", 11, [System.Drawing.FontStyle]::Bold)
+
 $createTileButton.Add_Click({
     Show-Panel -PanelToShow $createPanel -PanelToHide1 $mainMenuPanel -PanelToHide2 $terminatePanel
     $reenablePanel.Visible = $false
@@ -438,6 +451,12 @@ $terminateTileButton.Add_Click({
 $reenableTileButton.Add_Click({
     Show-Panel -PanelToShow $reenablePanel -PanelToHide1 $mainMenuPanel -PanelToHide2 $terminatePanel
     $createPanel.Visible = $false
+})
+
+$resetTileButton.Add_Click({
+    Show-Panel -PanelToShow $resetPanel -PanelToHide1 $mainMenuPanel -PanelToHide2 $reenablePanel
+    $createPanel.Visible = $false
+    $terminatePanel.Visible = $false
 })
 
 $backToMenuFromCreate = New-Object System.Windows.Forms.Button
@@ -465,6 +484,15 @@ $backToMenuFromReenable.Size = New-Object System.Drawing.Size(80, 28)
 $backToMenuFromReenable.Font = $font
 $backToMenuFromReenable.Add_Click({
     Show-Panel -PanelToShow $mainMenuPanel -PanelToHide1 $reenablePanel -PanelToHide2 $terminatePanel
+})
+
+$backToMenuFromReset = New-Object System.Windows.Forms.Button
+$backToMenuFromReset.Text = "Back"
+$backToMenuFromReset.Location = New-Object System.Drawing.Point(20, 20)
+$backToMenuFromReset.Size = New-Object System.Drawing.Size(80, 28)
+$backToMenuFromReset.Font = $font
+$backToMenuFromReset.Add_Click({
+    Show-Panel -PanelToShow $mainMenuPanel -PanelToHide1 $resetPanel -PanelToHide2 $reenablePanel
 })
 
 $firstNameLabel = New-Object System.Windows.Forms.Label
@@ -668,12 +696,6 @@ $reenableButton.Location = New-Object System.Drawing.Point(180, 330)
 $reenableButton.Size = New-Object System.Drawing.Size(180, 36)
 $reenableButton.Font = $font
 
-$resetPasswordButton = New-Object System.Windows.Forms.Button
-$resetPasswordButton.Text = "Reset Password"
-$resetPasswordButton.Location = New-Object System.Drawing.Point(380, 330)
-$resetPasswordButton.Size = New-Object System.Drawing.Size(180, 36)
-$resetPasswordButton.Font = $font
-
 $reenableLogLabel = New-Object System.Windows.Forms.Label
 $reenableLogLabel.Text = "Logs"
 $reenableLogLabel.Location = New-Object System.Drawing.Point(20, 380)
@@ -693,6 +715,67 @@ $reenableStatusLabel.Location = New-Object System.Drawing.Point(20, 440)
 $reenableStatusLabel.Size = New-Object System.Drawing.Size(620, 24)
 $reenableStatusLabel.Font = $font
 $reenableStatusLabel.ForeColor = [System.Drawing.Color]::DarkSlateGray
+
+$resetOuLabel = New-Object System.Windows.Forms.Label
+$resetOuLabel.Text = "Users OU"
+$resetOuLabel.Location = New-Object System.Drawing.Point(20, 60)
+$resetOuLabel.Size = New-Object System.Drawing.Size(150, 24)
+$resetOuLabel.Font = $font
+
+$resetOuComboBox = New-Object System.Windows.Forms.ComboBox
+$resetOuComboBox.Location = New-Object System.Drawing.Point(180, 58)
+$resetOuComboBox.Size = New-Object System.Drawing.Size(360, 24)
+$resetOuComboBox.Font = $font
+$resetOuComboBox.DropDownStyle = "DropDown"
+
+$refreshResetOuButton = New-Object System.Windows.Forms.Button
+$refreshResetOuButton.Text = "Refresh OUs"
+$refreshResetOuButton.Location = New-Object System.Drawing.Point(550, 56)
+$refreshResetOuButton.Size = New-Object System.Drawing.Size(90, 28)
+$refreshResetOuButton.Font = $font
+
+$resetSearchLabel = New-Object System.Windows.Forms.Label
+$resetSearchLabel.Text = "Search"
+$resetSearchLabel.Location = New-Object System.Drawing.Point(20, 100)
+$resetSearchLabel.Size = New-Object System.Drawing.Size(120, 24)
+$resetSearchLabel.Font = $font
+
+$resetSearchTextBox = New-Object System.Windows.Forms.TextBox
+$resetSearchTextBox.Location = New-Object System.Drawing.Point(180, 98)
+$resetSearchTextBox.Size = New-Object System.Drawing.Size(360, 24)
+$resetSearchTextBox.Font = $font
+
+$resetUserListBox = New-Object System.Windows.Forms.ListBox
+$resetUserListBox.Location = New-Object System.Drawing.Point(20, 140)
+$resetUserListBox.Size = New-Object System.Drawing.Size(620, 180)
+$resetUserListBox.Font = $font
+$resetUserListBox.SelectionMode = "MultiExtended"
+
+$resetPasswordButton = New-Object System.Windows.Forms.Button
+$resetPasswordButton.Text = "Reset Password"
+$resetPasswordButton.Location = New-Object System.Drawing.Point(180, 330)
+$resetPasswordButton.Size = New-Object System.Drawing.Size(180, 36)
+$resetPasswordButton.Font = $font
+
+$resetLogLabel = New-Object System.Windows.Forms.Label
+$resetLogLabel.Text = "Logs"
+$resetLogLabel.Location = New-Object System.Drawing.Point(20, 380)
+$resetLogLabel.Size = New-Object System.Drawing.Size(150, 24)
+$resetLogLabel.Font = $font
+
+$resetLogTextBox = New-Object System.Windows.Forms.TextBox
+$resetLogTextBox.Location = New-Object System.Drawing.Point(180, 378)
+$resetLogTextBox.Size = New-Object System.Drawing.Size(460, 56)
+$resetLogTextBox.Multiline = $true
+$resetLogTextBox.ReadOnly = $true
+$resetLogTextBox.Font = $font
+
+$resetStatusLabel = New-Object System.Windows.Forms.Label
+$resetStatusLabel.Text = "Ready"
+$resetStatusLabel.Location = New-Object System.Drawing.Point(20, 440)
+$resetStatusLabel.Size = New-Object System.Drawing.Size(620, 24)
+$resetStatusLabel.Font = $font
+$resetStatusLabel.ForeColor = [System.Drawing.Color]::DarkSlateGray
 
 $updatePreview = {
     $first = $firstNameTextBox.Text
@@ -834,6 +917,53 @@ function Filter-ReenableUserList {
     }
 }
 
+function Load-ResetUsersFromOu {
+    $resetUserListBox.Items.Clear()
+    $script:resetUserMap = @{}
+    $script:resetUserDisplayNames = @()
+
+    if (-not (Get-Module -ListAvailable -Name ActiveDirectory)) {
+        Update-Status -Label $resetStatusLabel -Message "ActiveDirectory module not available." -Color ([System.Drawing.Color]::DarkRed)
+        return
+    }
+
+    $ouSelection = $resetOuComboBox.Text.Trim()
+    $ouDn = Resolve-OuDn -Selection $ouSelection
+
+    if ([string]::IsNullOrWhiteSpace($ouDn)) {
+        Update-Status -Label $resetStatusLabel -Message "Select or enter an OU." -Color ([System.Drawing.Color]::DarkRed)
+        return
+    }
+
+    try {
+        $users = Get-ADUser -Filter * -SearchBase $ouDn -SearchScope OneLevel -Properties UserPrincipalName, SamAccountName | Sort-Object Name
+    }
+    catch {
+        Update-Status -Label $resetStatusLabel -Message "Unable to query users in OU." -Color ([System.Drawing.Color]::DarkRed)
+        return
+    }
+
+    foreach ($user in $users) {
+        $display = $user.Name
+        $script:resetUserMap[$display] = $user
+        $script:resetUserDisplayNames += $display
+    }
+
+    Filter-ResetUserList
+    Update-Status -Label $resetStatusLabel -Message "Loaded $($users.Count) users from OU." -Color ([System.Drawing.Color]::DarkGreen)
+    $resetLogTextBox.Text = "Loaded $($users.Count) users from $ouDn"
+}
+
+function Filter-ResetUserList {
+    $filterText = $resetSearchTextBox.Text.Trim().ToLowerInvariant()
+    $resetUserListBox.Items.Clear()
+    foreach ($display in $script:resetUserDisplayNames) {
+        if ([string]::IsNullOrWhiteSpace($filterText) -or $display.ToLowerInvariant().Contains($filterText)) {
+            [void]$resetUserListBox.Items.Add($display)
+        }
+    }
+}
+
 $firstNameTextBox.Add_TextChanged({
     $updatePreview.Invoke()
     Update-CreateButtonState
@@ -866,12 +996,24 @@ $reenableSearchTextBox.Add_TextChanged({
     Filter-ReenableUserList
 })
 
+$resetOuComboBox.Add_TextChanged({
+    Load-ResetUsersFromOu
+})
+
+$resetSearchTextBox.Add_TextChanged({
+    Filter-ResetUserList
+})
+
 $refreshTerminateOuButton.Add_Click({
     Load-OUs -ComboBox $terminateOuComboBox -StatusLabel $terminateStatusLabel
 })
 
 $refreshReenableOuButton.Add_Click({
     Load-DisabledOUs -ComboBox $reenableOuComboBox -StatusLabel $reenableStatusLabel
+})
+
+$refreshResetOuButton.Add_Click({
+    Load-OUs -ComboBox $resetOuComboBox -StatusLabel $resetStatusLabel
 })
 
 $copyCredentialsButton.Add_Click({
@@ -1110,19 +1252,19 @@ $reenableButton.Add_Click({
 
 $resetPasswordButton.Add_Click({
     if (-not (Get-Module -ListAvailable -Name ActiveDirectory)) {
-        Update-Status -Label $reenableStatusLabel -Message "ActiveDirectory module not available." -Color ([System.Drawing.Color]::DarkRed)
+        Update-Status -Label $resetStatusLabel -Message "ActiveDirectory module not available." -Color ([System.Drawing.Color]::DarkRed)
         return
     }
 
-    if ($reenableUserListBox.SelectedItems.Count -eq 0) {
-        Update-Status -Label $reenableStatusLabel -Message "Select at least one user to reset." -Color ([System.Drawing.Color]::DarkRed)
+    if ($resetUserListBox.SelectedItems.Count -eq 0) {
+        Update-Status -Label $resetStatusLabel -Message "Select at least one user to reset." -Color ([System.Drawing.Color]::DarkRed)
         return
     }
 
     $failed = @()
     $completedCredentials = @()
-    foreach ($display in $reenableUserListBox.SelectedItems) {
-        $user = $script:reenableUserMap[$display]
+    foreach ($display in $resetUserListBox.SelectedItems) {
+        $user = $script:resetUserMap[$display]
         if (-not $user) {
             $failed += $display
             continue
@@ -1144,12 +1286,12 @@ $resetPasswordButton.Add_Click({
     }
 
     if ($failed.Count -gt 0) {
-        Update-Status -Label $reenableStatusLabel -Message "Completed with errors. Failed: $($failed -join ', ')" -Color ([System.Drawing.Color]::DarkRed)
-        $reenableLogTextBox.Text = "Failed to reset: $($failed -join ', ')"
+        Update-Status -Label $resetStatusLabel -Message "Completed with errors. Failed: $($failed -join ', ')" -Color ([System.Drawing.Color]::DarkRed)
+        $resetLogTextBox.Text = "Failed to reset: $($failed -join ', ')"
     }
     else {
-        Update-Status -Label $reenableStatusLabel -Message "Selected users reset." -Color ([System.Drawing.Color]::DarkGreen)
-        $reenableLogTextBox.Text = "Password reset for: $($reenableUserListBox.SelectedItems -join ', ')"
+        Update-Status -Label $resetStatusLabel -Message "Selected users reset." -Color ([System.Drawing.Color]::DarkGreen)
+        $resetLogTextBox.Text = "Password reset for: $($resetUserListBox.SelectedItems -join ', ')"
     }
 
     if ($completedCredentials.Count -gt 0) {
@@ -1202,23 +1344,38 @@ $reenablePanel.Controls.AddRange(@(
     $reenableSearchTextBox,
     $reenableUserListBox,
     $reenableButton,
-    $resetPasswordButton,
     $reenableLogLabel,
     $reenableLogTextBox,
     $reenableStatusLabel
+))
+
+$resetPanel.Controls.AddRange(@(
+    $backToMenuFromReset,
+    $resetOuLabel,
+    $resetOuComboBox,
+    $refreshResetOuButton,
+    $resetSearchLabel,
+    $resetSearchTextBox,
+    $resetUserListBox,
+    $resetPasswordButton,
+    $resetLogLabel,
+    $resetLogTextBox,
+    $resetStatusLabel
 ))
 
 $mainMenuPanel.Controls.AddRange(@(
     $menuTitleLabel,
     $createTileButton,
     $terminateTileButton,
-    $reenableTileButton
+    $reenableTileButton,
+    $resetTileButton
 ))
 
 $form.Controls.Add($mainMenuPanel)
 $form.Controls.Add($createPanel)
 $form.Controls.Add($terminatePanel)
 $form.Controls.Add($reenablePanel)
+$form.Controls.Add($resetPanel)
 
 $form.Add_Shown({
     $form.Activate()
@@ -1238,6 +1395,7 @@ $form.Add_Shown({
     Load-OUs -ComboBox $ouComboBox -StatusLabel $createStatusLabel
     Load-OUs -ComboBox $terminateOuComboBox -StatusLabel $terminateStatusLabel
     Load-DisabledOUs -ComboBox $reenableOuComboBox -StatusLabel $reenableStatusLabel
+    Load-OUs -ComboBox $resetOuComboBox -StatusLabel $resetStatusLabel
 
 $createThumbnail = Get-LocalIconImage -Path "C:\\JUMP\\enableuser.ico" -Width 160 -Height 180
     if ($createThumbnail) {
