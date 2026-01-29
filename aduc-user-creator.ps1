@@ -520,7 +520,8 @@ $menuGrid.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.
 $menuGrid.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 25)))
 $menuGrid.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 50)))
 $menuGrid.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 50)))
-$menuGrid.BackColor = [System.Drawing.Color]::FromArgb(230, 255, 255, 255)
+$menuGrid.BackColor = [System.Drawing.Color]::Transparent
+$menuGrid.Parent = $mainMenuPanel
 
 $createTileButton = New-Object System.Windows.Forms.Button
 $createTileButton.Text = "Create User"
