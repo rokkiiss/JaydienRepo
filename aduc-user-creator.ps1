@@ -458,14 +458,14 @@ function Show-Panel {
 }
 
 $form = New-Object System.Windows.Forms.Form
-$form.Text = "J.U.M.P. Jaydien User Management Platform"
+$form.Text = "Jaydien Unified Management Platform"
 $form.Size = New-Object System.Drawing.Size(960, 560)
 $form.StartPosition = "CenterScreen"
 $form.FormBorderStyle = "Sizable"
 $form.MaximizeBox = $true
 $form.MinimumSize = New-Object System.Drawing.Size(800, 500)
 
-$font = New-Object System.Drawing.Font("Segoe UI", 10)
+$font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Regular)
 
 $mainMenuPanel = New-Object System.Windows.Forms.Panel
 $mainMenuPanel.Dock = "Fill"
@@ -491,13 +491,13 @@ $menuTitleLabel.Text = "Select an action"
 $menuTitleLabel.Dock = "Top"
 $menuTitleLabel.Padding = New-Object System.Windows.Forms.Padding(20, 20, 0, 10)
 $menuTitleLabel.AutoSize = $true
-$menuTitleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 14, [System.Drawing.FontStyle]::Bold)
+$menuTitleLabel.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 14, [System.Drawing.FontStyle]::Regular)
 
 $menuGrid = New-Object System.Windows.Forms.TableLayoutPanel
 $menuGrid.ColumnCount = 4
 $menuGrid.RowCount = 2
 $menuGrid.Dock = "Fill"
-$menuGrid.Padding = New-Object System.Windows.Forms.Padding(20, 20, 20, 20)
+$menuGrid.Padding = New-Object System.Windows.Forms.Padding(10, 10, 10, 10)
 $menuGrid.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 25)))
 $menuGrid.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 25)))
 $menuGrid.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 25)))
@@ -507,83 +507,83 @@ $menuGrid.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Window
 
 $createTileButton = New-Object System.Windows.Forms.Button
 $createTileButton.Text = "Create User"
-$createTileButton.Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
+$createTileButton.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 10, [System.Drawing.FontStyle]::Regular)
 $createTileButton.TextImageRelation = "ImageAboveText"
 $createTileButton.ImageAlign = "MiddleCenter"
 $createTileButton.TextAlign = "BottomCenter"
 $createTileButton.Dock = "Fill"
-$createTileButton.Margin = New-Object System.Windows.Forms.Padding(10)
+$createTileButton.Margin = New-Object System.Windows.Forms.Padding(4)
 
 $terminateTileButton = New-Object System.Windows.Forms.Button
 $terminateTileButton.Text = "Terminate User"
-$terminateTileButton.Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
+$terminateTileButton.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 10, [System.Drawing.FontStyle]::Regular)
 $terminateTileButton.TextImageRelation = "ImageAboveText"
 $terminateTileButton.ImageAlign = "MiddleCenter"
 $terminateTileButton.TextAlign = "BottomCenter"
 $terminateTileButton.Dock = "Fill"
-$terminateTileButton.Margin = New-Object System.Windows.Forms.Padding(10)
+$terminateTileButton.Margin = New-Object System.Windows.Forms.Padding(4)
 
 $reenableTileButton = New-Object System.Windows.Forms.Button
 $reenableTileButton.Text = "Re-enable User"
-$reenableTileButton.Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
+$reenableTileButton.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 10, [System.Drawing.FontStyle]::Regular)
 $reenableTileButton.TextImageRelation = "ImageAboveText"
 $reenableTileButton.ImageAlign = "MiddleCenter"
 $reenableTileButton.TextAlign = "BottomCenter"
 $reenableTileButton.Dock = "Fill"
-$reenableTileButton.Margin = New-Object System.Windows.Forms.Padding(10)
+$reenableTileButton.Margin = New-Object System.Windows.Forms.Padding(4)
 
 $resetTileButton = New-Object System.Windows.Forms.Button
 $resetTileButton.Text = "Reset Password"
-$resetTileButton.Font = New-Object System.Drawing.Font("Segoe UI", 11, [System.Drawing.FontStyle]::Bold)
+$resetTileButton.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 10, [System.Drawing.FontStyle]::Regular)
 $resetTileButton.TextImageRelation = "ImageAboveText"
 $resetTileButton.ImageAlign = "MiddleCenter"
 $resetTileButton.TextAlign = "BottomCenter"
 $resetTileButton.Dock = "Fill"
-$resetTileButton.Margin = New-Object System.Windows.Forms.Padding(10)
+$resetTileButton.Margin = New-Object System.Windows.Forms.Padding(4)
 
 $dummyTileButton1 = New-Object System.Windows.Forms.Button
 $dummyTileButton1.Text = "Under Development"
-$dummyTileButton1.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
+$dummyTileButton1.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 9, [System.Drawing.FontStyle]::Regular)
 $dummyTileButton1.Enabled = $false
 $dummyTileButton1.BackColor = [System.Drawing.Color]::LightGray
 $dummyTileButton1.TextImageRelation = "ImageAboveText"
 $dummyTileButton1.ImageAlign = "MiddleCenter"
 $dummyTileButton1.TextAlign = "BottomCenter"
 $dummyTileButton1.Dock = "Fill"
-$dummyTileButton1.Margin = New-Object System.Windows.Forms.Padding(10)
+$dummyTileButton1.Margin = New-Object System.Windows.Forms.Padding(4)
 
 $dummyTileButton2 = New-Object System.Windows.Forms.Button
 $dummyTileButton2.Text = "Under Development"
-$dummyTileButton2.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
+$dummyTileButton2.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 9, [System.Drawing.FontStyle]::Regular)
 $dummyTileButton2.Enabled = $false
 $dummyTileButton2.BackColor = [System.Drawing.Color]::LightGray
 $dummyTileButton2.TextImageRelation = "ImageAboveText"
 $dummyTileButton2.ImageAlign = "MiddleCenter"
 $dummyTileButton2.TextAlign = "BottomCenter"
 $dummyTileButton2.Dock = "Fill"
-$dummyTileButton2.Margin = New-Object System.Windows.Forms.Padding(10)
+$dummyTileButton2.Margin = New-Object System.Windows.Forms.Padding(4)
 
 $dummyTileButton3 = New-Object System.Windows.Forms.Button
 $dummyTileButton3.Text = "Under Development"
-$dummyTileButton3.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
+$dummyTileButton3.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 9, [System.Drawing.FontStyle]::Regular)
 $dummyTileButton3.Enabled = $false
 $dummyTileButton3.BackColor = [System.Drawing.Color]::LightGray
 $dummyTileButton3.TextImageRelation = "ImageAboveText"
 $dummyTileButton3.ImageAlign = "MiddleCenter"
 $dummyTileButton3.TextAlign = "BottomCenter"
 $dummyTileButton3.Dock = "Fill"
-$dummyTileButton3.Margin = New-Object System.Windows.Forms.Padding(10)
+$dummyTileButton3.Margin = New-Object System.Windows.Forms.Padding(4)
 
 $dummyTileButton4 = New-Object System.Windows.Forms.Button
 $dummyTileButton4.Text = "Under Development"
-$dummyTileButton4.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
+$dummyTileButton4.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 9, [System.Drawing.FontStyle]::Regular)
 $dummyTileButton4.Enabled = $false
 $dummyTileButton4.BackColor = [System.Drawing.Color]::LightGray
 $dummyTileButton4.TextImageRelation = "ImageAboveText"
 $dummyTileButton4.ImageAlign = "MiddleCenter"
 $dummyTileButton4.TextAlign = "BottomCenter"
 $dummyTileButton4.Dock = "Fill"
-$dummyTileButton4.Margin = New-Object System.Windows.Forms.Padding(10)
+$dummyTileButton4.Margin = New-Object System.Windows.Forms.Padding(4)
 
 $createTileButton.Add_Click({
     Show-Panel -PanelToShow $createPanel -PanelToHide1 $mainMenuPanel -PanelToHide2 $terminatePanel
